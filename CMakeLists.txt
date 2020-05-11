@@ -3,4 +3,4 @@ project(ML)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_library(ML library.cpp library.h)
+add_library(ML SHARED library.cpp library.h)

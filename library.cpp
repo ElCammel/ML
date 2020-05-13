@@ -12,7 +12,7 @@ extern "C"{
 
     __declspec(dllexport) int sign(double value) {
         if(value == 0){
-            return 0;
+            return 1;
         }
         else{
             if( value < 0){
@@ -65,7 +65,7 @@ extern "C"{
                                                                 double* training_inputs, int training_inputs_number, double* training_expected_inputs){
         std::random_device rd;
         std::mt19937 mt(rd());
-        std::uniform_int_distribution<int> dist(0, 1);
+        std::uniform_real_distribution<double> dist(0, 1);
 
         for(int e = 0; e < epoch; e++) {
             int trainingInput = (int)(dist(mt) * training_inputs_number);

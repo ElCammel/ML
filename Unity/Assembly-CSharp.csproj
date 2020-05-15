@@ -64,7 +64,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\LinearClassification.cs" />
+    <Compile Include="Assets\Scripts\LinearRegression.cs" />
     <Compile Include="Assets\Scripts\TestLinearClassification.cs" />
+    <Compile Include="Assets\Scripts\TestLinearClassificationSoft.cs" />
+    <Compile Include="Assets\Scripts\TestLinearRegression.cs" />
     <Reference Include="UnityEngine">
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.12f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>

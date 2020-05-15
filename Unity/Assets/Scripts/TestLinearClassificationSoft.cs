@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class TestLinearClassification : MonoBehaviour
+public class TestLinearClassificationSoft : MonoBehaviour
 {
     public Transform[] trainingSpheres;
     public Transform[] testSpheres;
@@ -39,7 +39,7 @@ public class TestLinearClassification : MonoBehaviour
     }
 
 
-    private Vector3 TransformSoft(Vector3 initial)
+    private Vector3 Transform(Vector3 initial)
     {
         var x = initial.x;
         var z = initial.z;
@@ -59,19 +59,7 @@ public class TestLinearClassification : MonoBehaviour
         return new Vector3(x, initial.y, z);
     }
 
-    private Vector3 TransformCross(Vector3 initial)
-    {
-        var x = Math.Abs(initial.x);
-        var z = Math.Abs(initial.z);
 
-        if (x > 4.2 || z > 4.2 || z > 1.2 && x > 1.2)
-        {
-            x += 10;
-            z += 10;
-        }
-
-        return new Vector3(x, initial.y, z);
-    }
 
     public void Train()
     {
@@ -106,7 +94,7 @@ public class TestLinearClassification : MonoBehaviour
         for (var i = 0; i < trainingSphereNumber; i++)
         {
             var position = trainingSpheres[i].position;
-            position = TransformSoft(position);
+            position = Transform(position);
             trainingInputs[i * 2] = position.x;
             trainingInputs[i * 2 + 1] = position.z;
             trainingExpectedOutputs[i] = position.y;
@@ -132,28 +120,6 @@ public class TestLinearClassification : MonoBehaviour
         }
 
         LinearClassification.linear_model_train_classification(this.model.Value, 1, epoch, 0.001, trainingInputs, trainingSphereNumber, trainingExpectedOutputs);
-        Debug.Log("Model trained !");
-    }
-
-    public void TrainCross()
-    {
-        CreateModel(2);
-
-        // Call lib to train on the array
-        var trainingSphereNumber = trainingSpheres.Length;
-        var trainingInputs = new double[trainingSphereNumber * 2];
-        var trainingExpectedOutputs = new double[trainingSphereNumber];
-
-        for (var i = 0; i < trainingSphereNumber; i++)
-        {
-            var position = trainingSpheres[i].position;
-            position = TransformCross(position);
-            trainingInputs[i * 2] = position.x;
-            trainingInputs[i * 2 + 1] = position.z;
-            trainingExpectedOutputs[i] = position.y;
-        }
-
-        LinearClassification.linear_model_train_classification(this.model.Value, 2, epoch, 0.01, trainingInputs, trainingSphereNumber, trainingExpectedOutputs);
         Debug.Log("Model trained !");
     }
 
@@ -197,7 +163,7 @@ public class TestLinearClassification : MonoBehaviour
         foreach (var testSphere in testSpheres)
         {
             var position = testSphere.position;
-            var transformedPosition = TransformSoft(position);
+            var transformedPosition = Transform(position);
             double[] inputs = { transformedPosition.x, transformedPosition.z };
             var predicted = LinearClassification.linear_model_predict_classification(this.model.Value, 1, inputs);
 
@@ -234,39 +200,10 @@ public class TestLinearClassification : MonoBehaviour
                 predicted * (float)0.5,
                 position.z
             );
-
             testSphere.position = position;
         }
 
         Debug.Log("Predicted");
     }
 
-    public void PredictCross()
-    {
-        if (this.model == null)
-        {
-            Debug.Log("Create model before");
-            return;
-        }
-
-        // Call lib to predict test spheres
-        foreach (var testSphere in testSpheres)
-        {
-            var position = testSphere.position;
-            var transformedPosition = TransformCross(position);
-
-            double[] inputs = { transformedPosition.x, transformedPosition.z };
-            var predicted = LinearClassification.linear_model_predict_classification(this.model.Value, 2, inputs);
-
-            position = new Vector3(
-                position.x,
-                predicted * (float)0.5,
-                position.z
-            );
-
-            testSphere.position = position;
-        }
-    }
-
 }
-

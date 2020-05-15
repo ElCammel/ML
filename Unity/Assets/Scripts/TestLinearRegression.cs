@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class TestLinearRegression : MonoBehaviour
 {
 
     public Transform[] trainingSpheres;
